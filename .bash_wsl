@@ -1,0 +1,12 @@
+
+
+export BROWSER='wslview'
+
+alias yt="wslview https://www.youtube.com"
+alias google="wslview https://www.google.com"
+alias winfiles="wslview explorer"
+alias whatsapp="wslview whatsapp://"
+alias onenote="wslview onenote"
+alias chrome="wslview chrome"
+alias discord="wslview discord://"
+alias spotify="wslview spotify"

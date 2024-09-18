@@ -1,0 +1,12 @@
+2024-09-18T16:31:55.294625+05:30 [0m[34m[INFO] [0mkanata v1.6.1 starting
+2024-09-18T16:31:55.2979566+05:30 [0m[34m[INFO] [0musing LLHOOK+SendInput for keyboard IO
+2024-09-18T16:32:05.2172015+05:30 [0m[34m[INFO] [0mprocess unmapped keys: true
+2024-09-18T16:32:05.2186395+05:30 [0m[34m[INFO] [0mNOTE: kanata was compiled to never allow cmd
+2024-09-18T16:32:05.2210944+05:30 [0m[34m[INFO] [0mconfig file is valid
+2024-09-18T16:32:05.2221919+05:30 [0m[34m[INFO] [0mAsking Windows to improve timer precision
+2024-09-18T16:32:05.2243691+05:30 [0m[34m[INFO] [0mAsking Windows to increase process priority
+2024-09-18T16:32:05.2246392+05:30 [0m[34m[INFO] [0mSleeping for 2s. Please release all keys and don't press additional ones. Run kanata with --help to see how understand more and how to disable this sleep.
+2024-09-18T16:32:07.2249263+05:30 [0m[34m[INFO] [0mentering the processing loop
+2024-09-18T16:32:07.2256983+05:30 [0m[34m[INFO] [0mInit: catching only releases and sending immediately
+2024-09-18T16:32:07.8577417+05:30 [0m[34m[INFO] [0mStarting kanata proper
+2024-09-18T16:32:07.8578397+05:30 [0m[34m[INFO] [0mYou may forcefully exit kanata by pressing lctl+spc+esc at any time. These keys refer to defsrc input, meaning BEFORE kanata remaps keys.

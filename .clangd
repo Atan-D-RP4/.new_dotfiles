@@ -1,0 +1,4 @@
+CompileFlags:
+  Add:
+    - "-I/home/atan/Software/tree-sitter/lib/include/"
+    - "-I/usr/lib/llvm-14/include/"
