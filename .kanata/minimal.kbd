@@ -28,8 +28,8 @@ file while unmapping lctl and ralt from defsrc.
 )
 
 (defsrc
-  caps             k		  ]
-              h    j    l	ret
+  caps             w		  ]
+              a    s    d	ret
   lsft rsft
 )
 
