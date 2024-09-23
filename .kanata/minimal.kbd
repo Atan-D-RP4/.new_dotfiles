@@ -28,7 +28,7 @@ file while unmapping lctl and ralt from defsrc.
 )
 
 (defsrc
-  caps tab         k
+  caps             k		  ]
               h    j    l	ret
   lsft rsft
 )
@@ -36,11 +36,11 @@ file while unmapping lctl and ralt from defsrc.
 (defalias
   ret (tap-hold-press 200 200 ret rctl)
   cap (tap-hold-press 200 200 esc lctl)
-  tab (tap-hold-press 200 200 tab (layer-toggle arrows))
+  ]   (tap-hold-press 200 200 tab (layer-toggle arrows))
 )
 
 (deflayer default
-  @cap @tab        _
+  @cap             _		  @]	
               _    _    _	@ret
   _    _
 )
