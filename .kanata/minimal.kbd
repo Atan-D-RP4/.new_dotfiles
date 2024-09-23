@@ -36,17 +36,17 @@ file while unmapping lctl and ralt from defsrc.
 (defalias
   ret (tap-hold-press 200 200 ret rctl)
   cap (tap-hold-press 200 200 esc lctl)
-  ]   (tap-hold-press 200 200 tab (layer-toggle arrows))
+  ]   (tap-hold-press 200 200  	] (layer-toggle arrows))
 )
 
 (deflayer default
-  @cap             _		  @]	
-              _    _    _	@ret
+  @cap             _		   @]
+              _    _    _	 @ret
   _    _
 )
 
 (deflayer arrows
-  _    _           up
-              left down rght -
+  _                up		  	-
+              left down rght  	-
   _    _
 )
