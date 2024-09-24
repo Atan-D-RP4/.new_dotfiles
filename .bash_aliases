@@ -54,3 +54,6 @@ alias findnode='find . -name 'node-modules' -type d |  xargs du -sh |  sort -hr 
 
 # Fuzzy Search History
 alias fzhst='history | awk "{print $2}" | sort | uniq -c | sort -nr | fzf-tmux -p80%,60% --no-preview'
+
+# Configuration command alias
+alias conf='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME/'

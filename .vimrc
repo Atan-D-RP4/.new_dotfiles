@@ -68,6 +68,7 @@ let g:lsp_semantic_enabled = 1
 let g:lsp_diagnostics_virtual_text_align = "after"
 let g:lsp_log_verbose = 0
 let g:lsp_log_file = expand('~/.vim/lsp.log')
+let g:lsp_inlay_hints = 1
 let g:asyncomplete_log_file = expand('~/.vim/asyncomplete.log')
 source ~/.vim/scripts/lsp_conf.vim
 
@@ -518,11 +519,14 @@ map Q gq
 " Revert with ":iunmap <C-U>".
 inoremap <C-U> <C-G>u<C-U>
 
+inoremap <C-c> <Esc><Esc>
+
 " Better keybinding Esc in insert mode
 inoremap <Esc> <Esc><Esc>
 
 inoremap <C-L> <Plug>(copilot-accept-word)
 inoremap <C-E> <Plug>(copilot-accept-line)
+inoremap <C-H> <Plug>(copilot-suggest)
 
 " Deals with search highlighting for me
 nnoremap <silent><CR> :noh<CR><ESC>
@@ -565,12 +569,14 @@ nnoremap <silent> <leader>u :edit! #<CR>
 nnoremap <silent> <leader>; :<Up><CR>
 
 " Auto-expands braces
-inoremap (; (<CR>);<C-c>O
-inoremap (, (<CR>),<C-c>O
-inoremap {; {<CR>};<C-c>O
-inoremap {, {<CR>},<C-c>O
-inoremap [; [<CR>];<C-c>O
-inoremap [, [<CR>],<C-c>O
+inoremap (; (<CR>);<Esc>O
+inoremap (, (<CR>),<Esc>O
+inoremap {; {<CR>};<Esc>O
+inoremap {, {<CR>},<Esc>O
+inoremap [; [<CR>];<Esc>O
+inoremap [, [<CR>],<Esc>O
+
+inoremap {<CR> {<CR>}<Esc>O
 
 imap <C-L> <Plug>(copilot-accept-word)
 

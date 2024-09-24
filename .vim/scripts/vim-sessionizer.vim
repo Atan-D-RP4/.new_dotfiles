@@ -18,6 +18,17 @@ function! LoadSession()
   endif
 endfunction
 
+function! ClearSession()
+  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+  let b:sessionfile = b:sessiondir . "/session.vim"
+  if (filereadable(b:sessionfile))
+	exe 'silent !rm ' b:sessionfile
+	redraw!
+  else
+	echo "No session to clear."
+	endif
+endfunction
+
 " Adding automatons for when entering or leaving Vim
 au VimEnter * nested :call LoadSession()
 au VimLeave * :call MakeSession()

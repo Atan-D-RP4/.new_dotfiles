@@ -71,8 +71,12 @@ def SetLspOptions()
 	endif
 enddef
 
+command! LspStart call lsp#enable()
+
 # Use an autocommand group to apply the function for any filetype
 augroup lsp_conf
 	autocmd!
 	autocmd User lsp_buffer_enabled call SetLspOptions()
+	autocmd User lsp_buffer_enabled execute 'LspStart'
+	autocmd User lsp_buffer_enabled call lsp#internal#inlay_hints#_enable()
 augroup END

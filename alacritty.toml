@@ -1,5 +1,5 @@
 live_config_reload = true
-working_directory = 'C:\\Users\91949'
+working_directory = "C:\\Users\\91949"
 
 [terminal]
 osc52 = "CopyPaste"
@@ -87,7 +87,7 @@ mods = "Control|Shift"
 [[keyboard.bindings]]
 action = "SpawnNewInstance"
 key = "N"
-mods = "Command"
+mods = "Control|Shift"
 
 [[keyboard.bindings]]
 action = "Quit"
@@ -114,26 +114,6 @@ action = "ResetFontSize"
 key = "Key0"
 mods = "Control"
 
-#[[keyboard.bindings]]
-#key = "CapsLock"
-#chars = "\u001b"
-
-#[[keyboard.bindings]]
-#key = "CapsLock"
-#mods = "Shift"
-#action = "None"
-#
-#[[keyboard.bindings]]
-#key = "CapsLock"
-#mods = "Control"
-#chars = "\u001d"
-#
-#[[keyboard.bindings]]
-#key = "CapsLock"
-#mods = "Alt"
-#chars = "\u001d"
-# -------------------
-
 [mouse]
 hide_when_typing = true
 
@@ -146,14 +126,14 @@ save_to_clipboard = true
 semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
 [shell]
-program = "wsl"
+program = "wsl --cd ~"
 
 [window]
 decorations = "full"
 startup_mode = "Maximized"
-opacity = 0.65
+opacity = 0.70
 title = "Alacritty"
-dynamic_title = false
+dynamic_title = true
 
 [window.dimensions]
 columns = 175
@@ -166,4 +146,3 @@ y = 0
 [window.position]
 x = 70
 y = 70
-
