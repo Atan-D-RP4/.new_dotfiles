@@ -76,17 +76,6 @@ if [[ -e /usr/share/bash-completion/completions/fzf ]]; then
 	# source $DOTFILES/completions.fzf
 fi
 
-preview() {
-	if [ -f "$1" ]; then
-		batcat --style=numbers --color=always --line-range :100 "$1"
-	elif [ -d "$1" ]; then
-		ls -l "$1"
-	# zcat for compressed files
-	elif file --mime-type "$1" | grep -q gzip; then
-		zcat "$1" | batcat --style=numbers --color=always --line-range :100
-	fi
-}
-
 if type rg &> /dev/null; then
 	export FZF_COMPLETION_TRIGGER="@"
 	export FZF_TMUX_OPTS='-p80%,60%' # This does indeed work

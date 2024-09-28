@@ -64,13 +64,17 @@ Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
+source ~/.vim/scripts/lsp_conf.vim
+
 let g:lsp_semantic_enabled = 1
 let g:lsp_diagnostics_virtual_text_align = "after"
-let g:lsp_log_verbose = 0
+let g:lsp_use_event_queue = 1
+let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('~/.vim/lsp.log')
-let g:lsp_inlay_hints = 1
-let g:asyncomplete_log_file = expand('~/.vim/asyncomplete.log')
-source ~/.vim/scripts/lsp_conf.vim
+let g:lsp_inlay_hints_enabled = 1
+
+let g:async_complete_min_chars = 3
+let g:asyncomplete_auto_completeopt = 0
 
 Plug 'mattn/emmet-vim'
 
@@ -155,6 +159,22 @@ if has ('termguicolors')
 	set termguicolors                 " Enable true colors
 endif
 
+if has("cscope")
+	set csprg=/usr/bin/cscope
+	set csto=0
+	set cst
+	set nocsverb
+	" add any database in current directory
+	if filereadable("cscope.out")
+		cs add cscope.out
+	" else add database pointed to by environment
+	elseif $CSCOPE_DB != ""
+		cs add $CSCOPE_DB
+	endif
+	set csverb
+endif
+
+
 set background=dark					" Set background to dark
 colorscheme wildcharm
 
@@ -223,7 +243,7 @@ set timeoutlen=1000					" Time out for key codes
 set wildignore=*.o,*.so*.obj,*~,*swp,*.exe
 set wildmenu						" Shows a horizontal list of completion options
 set wildmode=longest:full,full		" Command-line completion mode
-set wildoptions=pum
+set wildoptions=pum,fuzzy
 set pumheight=20					" Maximum number of items in the popup menu
 
 set display=truncate				" Show @@@ in the last line if it is truncated.
@@ -255,7 +275,7 @@ set mouse=a                         " Enable mouse support
 
 " ================= Will only work with no colorscheme =================
 
-set completeopt=longest,menu,menuone,preview,noinsert,noselect
+set completeopt=menu,menuone,preview,noinsert,noselect
 
 set signcolumn=yes
 
@@ -340,8 +360,8 @@ function! LspDocumentSymbolsFzf() abort
 	call fzf#run(fzf#wrap({
 				\ 'source': l:symbols,
 				\ 'sink': function('LspJumpToSymbol'),
-			\})
-		\ )
+				\})
+				\ )
 endfunction
 
 function! LspJumpToSymbol(selected) abort

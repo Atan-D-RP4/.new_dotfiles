@@ -120,6 +120,19 @@ __bash_prompt() {
 }
 __bash_prompt
 
+# Function to update prompt when changing directories
+update_prompt() {
+	local dir="$PWD"
+	while [ "$dir" != "/" ]; do
+		if [ -d "$dir/.git" ]; then
+			__bash_prompt
+			return
+		fi
+		dir="$(dirname "$dir")"
+	done
+	PS1='\[\033[0;32m\]\u@\h➜ \[\033[1;34m\]\w \$ \[\033[0m\]'
+}
+
 # Flag to track if ssh-agent has been started within the tmux session
 SSH_AGENT_STARTED_FLAG="/tmp/ssh_agent_started_$USER"
 
@@ -136,20 +149,6 @@ function setgit() {
 		fi
 	fi
 	ssh-add ~/.ssh/Github/id_ed25519
-}
-
-
-# Function to update prompt when changing directories
-update_prompt() {
-	local dir="$PWD"
-	while [ "$dir" != "/" ]; do
-		if [ -d "$dir/.git" ]; then
-			__bash_prompt
-			return
-		fi
-		dir="$(dirname "$dir")"
-	done
-	PS1='\[\033[0;32m\]\u@\h➜ \[\033[1;34m\]\w \$ \[\033[0m\]'
 }
 
 function fzf_preview() {
