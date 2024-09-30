@@ -8,6 +8,8 @@ call plug#begin()
 "Other Plugins
 " ------
 
+Plug 'paradigm/SkyBison'
+
 " Mulitple Cursors
 " Plug 'mg979/vim-visual-multi'
 " Plug 'terryma/vim-multiple-cursors'
@@ -22,23 +24,6 @@ Plug 'github/copilot.vim'
 
 " Status Line
 Plug 'Atan-D-RP4/eleline.vim'
-
-" Plug 'vim-airline/vim-airline'
-" let g:airline#extensions#tabline#enabled = 1 " Enable the list of buffers
-" let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
-
-" Should also experiment with 'itchyny/lightline.vim'
-" Also check out 'edkolev/tmuxline.vim'
-
-" " Code Completion
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" let g:coc_node_path = '/home/atan/.nvm/versions/node/v21.7.1/bin/node' " Sets path to node executable
-
-" " Disable coc.nvim for .txt and .md files
-" autocmd FileType txt,md let b:coc_enabled = 0
-"
-" " Settings for the coc.nvim plugin
-" source ~/.vim/scripts/coc_settings.vim
 
 " Indentation for Python
 Plug 'vim-scripts/indentpython.vim'
@@ -256,24 +241,18 @@ set mouse=a                         " Enable mouse support
 " highlight WildMenu ctermfg=Red ctermbg=LightBlue
 
 " Customize autocomplete menu appearance
-" highlight Pmenu		 ctermfg=Black ctermbg=DarkGrey
-" highlight PmenuSel	 ctermfg=Black ctermbg=Blue
-" highlight CocPmenu	 ctermfg=Black ctermbg=Red
-" highlight CocMenuSel	 ctermfg=Black ctermbg=Red
-" highlight CocPumMenu	 ctermfg=Black ctermbg=Red
-" highlight CocPmenuSel	 ctermfg=Black ctermbg=Blue
-" highlight CocFloating	 ctermfg=Black ctermbg=Green
 "
 " highlight CursorLine   ctermfg=Green guifg=Green ctermbg=LightBlue guibg=Blue
 " highlight CursorColumn ctermfg=Green guifg=Green ctermbg=LightBlue guibg=Blue
 
-"autocmd InsertEnter * highlight CursorLine ctermfg=Green guifg=Green ctermbg=LightBlue guibg=Blue
-"autocmd InsertEnter * highlight CursorColumn ctermfg=White ctermbg=LightBlue cterm=bold guifg=white guibg=yellow gui=bold
-"
 "autocmd InsertLeave * highlight CursorLine ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE
 "autocmd InsertLeave * highlight CursorColumn ctermfg=NONE ctermbg=NONE cterm=bold guifg=Black guibg=yellow gui=NONE
-
 " ================= Will only work with no colorscheme =================
+
+autocmd InsertEnter * highlight CursorLine ctermbg=236 guibg=#303045
+autocmd InsertEnter * highlight CursorColumn ctermbg=236 guibg=#303045
+autocmd InsertLeave * highlight CursorLine ctermbg=NONE guibg=NONE
+autocmd InsertLeave * highlight CursorColumn ctermbg=NONE guibg=NONE
 
 set completeopt=menu,menuone,preview,noinsert,noselect
 
@@ -585,9 +564,6 @@ nnoremap <silent> <leader>[ :bprevious!<CR>
 nnoremap <silent> <leader>d :bdelete! %<CR>
 nnoremap <silent> <leader>u :edit! #<CR>
 
-" Keymap for repeating ':' commands
-nnoremap <silent> <leader>; :<Up><CR>
-
 " Auto-expands braces
 inoremap (; (<CR>);<Esc>O
 inoremap (, (<CR>),<Esc>O
@@ -638,6 +614,13 @@ nmap j gj
 nmap k gk
 vmap j gj
 vmap k gk
+
+nnoremap : :<C-f>
+nnoremap <silent> <leader>: :call SkyBison("")<CR>
+nnoremap <Esc> <C-c><C-c>
+
+" Keymap for repeating ':' commands
+nnoremap <silent> <leader>; :<Up><CR>
 
 "===========================================================================================================
 
