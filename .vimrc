@@ -8,6 +8,13 @@ call plug#begin()
 "Other Plugins
 " ------
 
+Plug 'justinmk/vim-sneak'
+
+
+" Peeking into registers
+Plug 'junegunn/vim-peekaboo'
+
+" Better Command Line
 Plug 'paradigm/SkyBison'
 
 " Mulitple Cursors
@@ -23,14 +30,17 @@ let g:qs_max_chars=150
 Plug 'github/copilot.vim'
 
 " Status Line
-Plug 'Atan-D-RP4/eleline.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='alduin'
 
 " Indentation for Python
 Plug 'vim-scripts/indentpython.vim'
 
 " File tree and fuzzy search
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', "{ 'dir': '~/.fzf', 'do': './install --all' }
 let g:fzf_command = 'rg --files -L' " Set fzf command to use ripgrep (optional)
 
 Plug 'mbbill/undotree'
@@ -47,10 +57,6 @@ Plug 'tpope/vim-fugitive'
 " LSP and LanguageClient Plugins
 Plug 'mattn/vim-lsp-settings'
 Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-source ~/.vim/scripts/lsp_conf.vim
-
 let g:lsp_semantic_enabled = 1
 let g:lsp_diagnostics_virtual_text_align = "after"
 let g:lsp_use_event_queue = 1
@@ -58,8 +64,12 @@ let g:lsp_log_verbose = 1
 let g:lsp_log_file = expand('~/.vim/lsp.log')
 let g:lsp_inlay_hints_enabled = 1
 
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
 let g:async_complete_min_chars = 3
 let g:asyncomplete_auto_completeopt = 0
+
+source ~/.vim/scripts/lsp_conf.vim
 
 Plug 'mattn/emmet-vim'
 
@@ -366,67 +376,6 @@ function! MoveLines(offset) range
 	exe 'normal ' . l:col . '|'
 endf
 
-"===========================================================================================================
-
-"         Commands and Autocommands----
-
-" Jump to last position when reopening a file
-au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-
-" Set textwidth and enable line wrapping for files with .txt extension
-autocmd FileType txt setlocal! textwidth=147 wrap spell
-autocmd FileType rust setlocal! makeprg=clear;\ cargo
-autocmd FileType python setlocal! makeprg=clear;\ python3
-autocmd FileType c setlocal! makeprg=clear;\ make
-
-" Define a custom command to format Rust code using rustfmt
-autocmd FileType c setlocal! equalprg=clang-format\ --style=\"{BasedOnStyle:\ llvm,\ IndentWidth:\ 4}\"
-autocmd FileType rust setlocal! equalprg=rustfmt
-autocmd BufWritePre *.rs execute 'RustFmt'
-
-if !exists(":DiffOrig")
-	command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-				\ | wincmd p | diffthis
-endif
-
-" Only do this part when Vim was compiled with the +eval feature.
-if 1
-	" Enable file type detection.
-	" Use the default filetype settings, so that mail gets 'tw' set to 72,
-	" 'cindent' is on in C files, etc.
-	" Also load indent files, to automatically do language-dependent indenting.
-	" Revert with ":filetype off".
-	filetype plugin indent on
-
-	" Put these in an autocmd group, so that you can revert them with:
-	" ":augroup vimStartup | exe 'au!' | augroup END"
-	augroup vimStartup
-		au!
-
-		" When editing a file, always jump to the last known cursor position.
-		" Don't do it when the position is invalid, when inside an event handler
-		" (happens when dropping a file on gvim) and for a commit message (it's
-		" likely a different one than last time).
-		autocmd BufReadPost *
-					\ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-					\ |   exe "normal! g`\""
-					\ | endif
-
-		" Write an autocmd to highlight trailing whitespace only if modifiable
-		autocmd BufWinEnter * if &modifiable | %s/\s\+$//e | endif
-	augroup END
-endif
-
-" Put these in an autocmd group, so that we can delete them easily.
-augroup vimrc_ex
-	au!
-	autocmd FileType markdown setlocal! textwidth=190
-	" For all text files set 'textwidth' to 147 characters.
-	autocmd FileType text setlocal! textwidth=147
-	autocmd FileType text setlocal! spell
-	autocmd FileType html setlocal! nowrap
-augroup END
-
 " Move visual selection up or down
 function! MoveVisualSelection(offset) range
 	" Save current cursor position and visual mode
@@ -500,10 +449,98 @@ function! AutoIndent()
 	call setpos('.', l:save_cursor)
 endfunction
 
+function! CFmt() abort
+	let l:save_cursor = getpos('.')
+
+	if executable('clang-format')
+		let l:style = "{BasedOnStyle: llvm, IndentWidth: 4, SpaceAfterCStyleCast: true, SpaceBeforeCpp11BracedList: true}"
+		let l:opts = '--style="' . l:style . '"' . " --sort-includes"
+		let l:buffer_text = getline(1, '$')
+		let l:buffer_text = join(l:buffer_text, "\n")
+		let l:cmd = 'clang-format ' . l:opts
+
+		let l:formatted = systemlist(l:cmd, l:buffer_text)
+		" Replace the text in the buffer with the formatted text
+		call setline(1, l:formatted)
+		redraw
+	else
+		echoerr 'clang-format executable not found'
+		echoerr 'install with `sudo apt install clang-format`'
+	endif
+
+	call setpos('.', l:save_cursor)
+endfunction
+
+"===========================================================================================================
+
+"         Commands and Autocommands----
+
 command! ClearTrailingSpaces call ClearTrailingSpaces()
 command! AutoIndent call AutoIndent()
 command! ToggleNetrw call ToggleNetrw()
+command! CFmt call CFmt() | redraw!
 " command! FZFArgs call fzf#run(fzf#wrap({'source': argv(), 'options': '--multi'}))
+
+" Jump to last position when reopening a file
+au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+
+" Set textwidth and enable line wrapping for files with .txt extension
+autocmd FileType txt setlocal! textwidth=147 wrap spell
+autocmd FileType rust setlocal! makeprg=clear;\ cargo
+autocmd FileType python setlocal! makeprg=clear;\ python3
+autocmd FileType c setlocal! makeprg=clear;\ make
+
+autocmd BufWritePre *.rs execute 'RustFmt'
+autocmd BufWritePre *.c execute 'CFmt'
+
+if !exists(":DiffOrig")
+	command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+				\ | wincmd p | diffthis
+endif
+
+" Only do this part when Vim was compiled with the +eval feature.
+if 1
+	" Enable file type detection.
+	" Use the default filetype settings, so that mail gets 'tw' set to 72,
+	" 'cindent' is on in C files, etc.
+	" Also load indent files, to automatically do language-dependent indenting.
+	" Revert with ":filetype off".
+	filetype plugin indent on
+
+	" Put these in an autocmd group, so that you can revert them with:
+	" ":augroup vimStartup | exe 'au!' | augroup END"
+	augroup vimStartup
+		au!
+
+		" When editing a file, always jump to the last known cursor position.
+		" Don't do it when the position is invalid, when inside an event handler
+		" (happens when dropping a file on gvim) and for a commit message (it's
+		" likely a different one than last time).
+		autocmd BufReadPost *
+					\ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+					\ |   exe "normal! g`\""
+					\ | endif
+
+		" Write an autocmd to highlight trailing whitespace only if modifiable
+		autocmd BufWinEnter * if &modifiable | %s/\s\+$//e | endif
+	augroup END
+endif
+
+" Put these in an autocmd group, so that we can delete them easily.
+augroup vimrc_ex
+	au!
+	autocmd FileType markdown setlocal! textwidth=190
+	" For all text files set 'textwidth' to 147 characters.
+	autocmd FileType text setlocal! textwidth=147
+	autocmd FileType text setlocal! spell
+	autocmd FileType html setlocal! nowrap
+augroup END
+
+augroup qs_colors
+	autocmd!
+	autocmd ColorScheme * highlight QuickScopePrimary guifg=#afff5f gui=underline ctermfg=155 cterm=underline
+	autocmd ColorScheme * highlight QuickScopeSecondary guifg=#5fffff gui=underline ctermfg=81 cterm=underline
+augroup END
 
 "===========================================================================================================
 
@@ -537,7 +574,7 @@ nnoremap <leader><CR> i<CR><Esc>
 nnoremap <leader><BS> dd
 
 " Keybinding for opening terminal
-nnoremap <leader>' :terminal<CR>
+nnoremap <leader>' :terminal fish<CR>
 
 " Keybinding for Toggling NERDTree
 " nnoremap <C-n> :NERDTreeToggle<CR>
@@ -615,12 +652,18 @@ nmap k gk
 vmap j gj
 vmap k gk
 
-nnoremap : :<C-f>
+nnoremap : q:
 nnoremap <silent> <leader>: :call SkyBison("")<CR>
 nnoremap <Esc> <C-c><C-c>
 
 " Keymap for repeating ':' commands
 nnoremap <silent> <leader>; :<Up><CR>
+
+" Remapping for vim-sneak
+nmap gs <Plug>Sneak_s
+nmap gS <Plug>Sneak_S
+vmap gs <Plug>Sneak_s
+vmap gS <Plug>Sneak_S
 
 "===========================================================================================================
 
