@@ -38,6 +38,14 @@ case "$TERM" in
 	xterm-color|*-256color) color_prompt=yes;;
 esac
 
+# If in Tmux session, set $TERM to screen-256color or tmux-256color
+if [ -n "$TMUX" ]; then
+	case "$TERM" in
+		screen-256color) ;;
+		*) export TERM=screen-256color;;
+	esac
+fi
+
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
@@ -174,3 +182,5 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # ~/DOTFILES/scripts/update_git.sh &
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

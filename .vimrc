@@ -10,7 +10,6 @@ call plug#begin()
 
 Plug 'justinmk/vim-sneak'
 
-
 " Peeking into registers
 Plug 'junegunn/vim-peekaboo'
 
